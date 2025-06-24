@@ -1,10 +1,24 @@
 import { SearchIcon } from 'lucide-react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardFooter } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
+import { FaBox, FaHome, FaUser, FaTools, FaUsers, FaBriefcase, FaCalendarAlt, FaHeart, FaBullhorn } from 'react-icons/fa'
+
+const iconMap = {
+  'For Sale': FaBox,
+  'Housing': FaHome,
+  'Jobs': FaUser,
+  'Services': FaTools,
+  'Community': FaUsers,
+  'Gigs': FaBriefcase,
+  'Events': FaCalendarAlt,
+  'Dating': FaHeart,
+  'Campaigns': FaBullhorn,
+}
 
 const Home = () => {
+  const navigate = useNavigate();
   // Product data for the "Explore HOT Ads" section
   const hotAds = [
     {
@@ -67,14 +81,23 @@ const Home = () => {
   return (
     <div className="w-full">
       {/* Hero Section */}
-      <section className="relative pt-20 pb-32 px-4">
-        <div className="text-center mx-auto max-w-[849px]">
+      <section
+        className="relative pt-20 pb-32 px-4"
+        style={{
+          backgroundImage: "url('/figmaAssets/herobackground.jpg')",
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundRepeat: 'no-repeat',
+        }}
+      >
+        <div className="absolute inset-0 bg-black/60 z-0" />
+        <div className="relative text-center mx-auto max-w-[849px] z-10">
           <h1 className="text-white text-[56px] font-normal tracking-[-1.5px] leading-[64px] mb-16">
             Welcome to Global Board - Your Gateway to Infinite Possibilities!
           </h1>
         </div>
 
-        <div className="max-w-[500px] mx-auto">
+        <div className="relative max-w-[500px] mx-auto z-10">
           <div className="relative bg-[#1f1f1f] rounded-xl shadow-[0px_8px_24px_-8px_#00000029]">
             <div className="flex h-14 items-center gap-3 p-4">
               <SearchIcon className="w-6 h-6 text-[#595d62]" />
@@ -87,7 +110,7 @@ const Home = () => {
         </div>
 
         {/* Background gradient */}
-        <div className="absolute w-full h-[300px] bottom-0 left-0 bg-[linear-gradient(180deg,rgba(1,1,1,0)_0%,rgba(11,11,11,1)_100%)]" />
+        <div className="absolute w-full h-[300px] bottom-0 left-0 bg-[linear-gradient(180deg,rgba(1,1,1,0)_0%,rgba(11,11,11,1)_100%)] z-10" />
       </section>
 
       {/* Product Listings Section */}
@@ -133,26 +156,23 @@ const Home = () => {
                 </CardContent>
                 <CardFooter className="flex justify-between p-4 pt-0">
                   <span className="text-white font-medium">{ad.price}</span>
-                  <Link to={`/product/${ad.id}`}>
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      className="text-[#5648ff]"
-                    >
-                      Details
-                    </Button>
-                  </Link>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="text-[#5648ff]"
+                    onClick={() => navigate('/products')}
+                  >
+                    Details
+                  </Button>
                 </CardFooter>
               </Card>
             ))}
           </div>
 
           <div className="flex justify-center mt-8">
-            <Link to="/explore">
-              <Button variant="outline" className="text-white border-[#444444]">
-                See all ads
-              </Button>
-            </Link>
+            <Button variant="outline" className="text-white border-[#444444]" onClick={() => navigate('/products')}>
+              See all ads
+            </Button>
           </div>
         </div>
       </section>
@@ -196,19 +216,22 @@ const Home = () => {
           </h2>
 
           <div className="grid grid-cols-3 gap-4 max-w-[600px] mx-auto">
-            {categories.map((category) => (
-              <Card
-                key={category.id}
-                className="bg-[#1f1f1f] border-none hover:bg-[#2a2a2a] transition-colors cursor-pointer"
-              >
-                <CardContent className="flex flex-col items-center justify-center p-6 text-center">
-                  <div className="w-12 h-12 rounded-full bg-[#2a2a2a] flex items-center justify-center mb-3">
-                    <img src="/figmaAssets/icon.svg" alt={category.name} className="w-6 h-6" />
-                  </div>
-                  <h3 className="text-white text-sm font-medium">{category.name}</h3>
-                </CardContent>
-              </Card>
-            ))}
+            {categories.map((category) => {
+              const Icon = iconMap[category.name] || FaBox;
+              return (
+                <Card
+                  key={category.id}
+                  className="bg-[#1f1f1f] border-none hover:bg-[#2a2a2a] transition-colors cursor-pointer"
+                >
+                  <CardContent className="flex flex-col items-center justify-center p-6 text-center">
+                    <div className="w-12 h-12 rounded-full bg-[#2a2a2a] flex items-center justify-center mb-3">
+                      <Icon className="w-6 h-6 text-blue-400" />
+                    </div>
+                    <h3 className="text-white text-sm font-medium">{category.name}</h3>
+                  </CardContent>
+                </Card>
+              )
+            })}
           </div>
         </div>
       </section>
